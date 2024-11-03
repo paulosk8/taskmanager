@@ -14,17 +14,38 @@ taskForm.addEventListener("submit", (event) => {
 });
 
 function createTaskElement(task) {
-  // Función para crear el elemento para agregar la tarea
   const li = document.createElement("li"); // Creamos un elemento li
   li.textContent = task; // Agregamos el valor de la tarea al contenido del li
   li.append(createButton(" ❌ ", "delete-btn"), createButton("✏️", "edit-btn")); // Insertamos el elemento li al elemento padre que es la lista de tareas y llamamos el metodo createButton para agregar el boton de eliminar y editar la tarea
   return li; // Retornamos el elemento li
-}
+} // Función para crear el elemento para agregar la tarea
 
 function createButton(text, className) {
-  // Función para crear botónes
   const btn = document.createElement("span"); // Creamos el botón de tipo span
   btn.textContent = text; // Agregamos el texto al botón
   btn.className = className; // Agregamos la clase al botón
   return btn; // Retornamos el botón
-}
+} // Función para crear botónes
+taskList.addEventListener("click", (event) => {
+  console.log(event.target); // Imprime el eleento seleccionado
+  if (event.target.classList.contains("delete-btn")) {
+    // Condicion para saber contiene algun elemento la clase delete-btn
+    deleteTask(event.target.parentElement); // En caso de contener la clase delete-btn elimina el elemento hijo del elemento padre
+  } else if (event.target.classList.contains("edit-btn")) {
+    editTask(event.target.parentElement); // En caso de que se de clic en editar llamamos al método editTask para editar la tarea
+  }
+}); // Utilizamos delegacion de eventos para que el padre sepa a quien le di clic para agregar la funcionalidad del evento
+
+function deleteTask(taskItem) {
+  if (confirm("Seguro que deseas eliminar esta tarea")) {
+    // Pregunta si esta seguro de eliminar
+    taskItem.remove(); // Si la respuesta es afirmativa remueve ese elemento
+  }
+} // Función para eliminar tarea
+function editTask(taskItem) {
+  const newTask = prompt("Edita la tarea: ", taskItem.firstChild.textContent); // Prompt que presenta el texto de contenido de la tarea para editarlo
+  if (newTask !== null) {
+    // validamos que el textContent de la tarea no sea null
+    taskItem.firstChild.textContent = newTask; // Reescribimos el contenido anterior de la tarea con el nuevo contenido
+  }
+} // Función para editar tarea
